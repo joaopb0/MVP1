@@ -1,0 +1,24 @@
+{
+  "name": "sgi-fj-grafica-mvp-poc",
+  "version": "1.0.0",
+  "description": "POC academica do Sistema de Gestao Interna FJ Grafica e Papelaria (MVP).",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js",
+    "test": "node --test",
+    "lint": "eslint src tests"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bootstrap": "^5.3.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1"
+  }
+}

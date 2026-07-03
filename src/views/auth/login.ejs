@@ -1,0 +1,34 @@
+<%- include('../partials/head', { title }) %>
+
+<main class="login-shell">
+  <section class="login-panel">
+    <div class="login-title">
+      <span class="app-kicker">MVP academico</span>
+      <h1>Sistema de Gestao Interna</h1>
+      <p>FJ Grafica e Papelaria</p>
+    </div>
+
+    <% if (error) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <form action="/login" method="post" class="stack-form">
+      <div>
+        <label class="form-label" for="username">Usuario</label>
+        <input class="form-control" id="username" name="username" autocomplete="username" required>
+      </div>
+      <div>
+        <label class="form-label" for="password">Senha</label>
+        <input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary w-100" type="submit">Entrar</button>
+    </form>
+
+    <div class="seed-box">
+      <div><strong>Gestor:</strong> gestor / 123456</div>
+      <div><strong>Vendedor:</strong> vendedor / 123456</div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

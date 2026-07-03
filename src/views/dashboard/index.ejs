@@ -1,0 +1,99 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<main class="container-fluid app-main">
+  <%- include('../partials/flash') %>
+
+  <div class="page-heading">
+    <div>
+      <span class="app-kicker">Dashboard Gerencial</span>
+      <h1>Controle de pedidos, lucro e comissoes</h1>
+    </div>
+    <form class="filter-bar" method="get" action="/">
+      <input class="form-control" type="datetime-local" name="inicio" value="<%= filters.inicio || '' %>" aria-label="Inicio">
+      <input class="form-control" type="datetime-local" name="fim" value="<%= filters.fim || '' %>" aria-label="Fim">
+      <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+    </form>
+  </div>
+
+  <section class="metrics-grid">
+    <article class="metric-box">
+      <span>Pedidos</span>
+      <strong><%= metrics.totalPedidos %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Faturamento</span>
+      <strong><%= metrics.faturamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Lucro liquido</span>
+      <strong><%= metrics.lucroLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Comissoes</span>
+      <strong><%= metrics.comissoes.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Saldo manual</span>
+      <strong><%= metrics.saldoLancamentos.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+  </section>
+
+  <section class="content-grid">
+    <div class="panel">
+      <div class="panel-heading">
+        <h2>Pedidos recentes</h2>
+        <a class="btn btn-sm btn-primary" href="/pedidos">Novo pedido</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Venda</th>
+              <th>Lucro</th>
+              <th>Comissao</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% pedidos.forEach((pedido) => { %>
+              <tr>
+                <td><%= pedido.nome_cliente %></td>
+                <td><%= pedido.valor_bruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                <td><%= pedido.lucro_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                <td><%= pedido.comissao_vendedor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                <td><span class="status-pill"><%= pedido.status_pedido %></span></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-heading">
+        <h2>Documentos conciliados</h2>
+      </div>
+      <div class="list-group list-group-flush">
+        <% if (documentos.length === 0) { %>
+          <div class="empty-state">Nenhum documento conciliado.</div>
+        <% } %>
+        <% documentos.forEach((documento) => { %>
+          <a class="list-group-item list-group-item-action" href="/documentos/<%= documento.id %>/download">
+            <div class="fw-semibold"><%= documento.tipo_documento %> - <%= documento.nome_arquivo %></div>
+            <small>
+              <% if (documento.pedido) { %>
+                Pedido #<%= documento.pedido.id %> - <%= documento.pedido.nome_cliente %>
+              <% } else if (documento.lancamento) { %>
+                Lancamento #<%= documento.lancamento.id %> - <%= documento.lancamento.categoria %>
+              <% } %>
+            </small>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

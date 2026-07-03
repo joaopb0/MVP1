@@ -1,0 +1,185 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<main class="container-fluid app-main">
+  <%- include('../partials/flash') %>
+
+  <div class="page-heading">
+    <div>
+      <span class="app-kicker">Modulo de pedidos</span>
+      <h1>Painel de pedidos e conciliacao</h1>
+    </div>
+    <span class="config-chip">Comissao padrao: <%= (percentualComissao * 100).toLocaleString('pt-BR') %>% do lucro liquido</span>
+  </div>
+
+  <section class="content-grid content-grid-wide">
+    <form action="/pedidos" method="post" class="panel stack-form">
+      <div class="panel-heading">
+        <h2>Novo pedido</h2>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label" for="nome_cliente">Cliente</label>
+          <input class="form-control" id="nome_cliente" name="nome_cliente" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="plataforma_venda">Plataforma de venda</label>
+          <input class="form-control" id="plataforma_venda" name="plataforma_venda" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="valor_bruto">Valor bruto</label>
+          <input class="form-control" id="valor_bruto" name="valor_bruto" type="number" min="0" step="0.01" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="custo_total_fornecedor">Custo fornecedor</label>
+          <input class="form-control" id="custo_total_fornecedor" name="custo_total_fornecedor" type="number" min="0" step="0.01" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="valor_taxas">Taxas</label>
+          <input class="form-control" id="valor_taxas" name="valor_taxas" type="number" min="0" step="0.01" required>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="vendedor_id">Vendedor</label>
+          <select class="form-select" id="vendedor_id" name="vendedor_id" required>
+            <% vendedores.forEach((vendedor) => { %>
+              <option value="<%= vendedor.id %>"><%= vendedor.username %></option>
+            <% }) %>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="data_pedido">Data do pedido</label>
+          <input class="form-control" id="data_pedido" name="data_pedido" type="datetime-local">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="status_pedido">Status</label>
+          <input class="form-control" id="status_pedido" name="status_pedido" value="Novo" required>
+        </div>
+      </div>
+      <button class="btn btn-primary align-self-start" type="submit">Registrar pedido</button>
+    </form>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h2>Pedidos cadastrados</h2>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Cliente</th>
+              <th>Plataforma</th>
+              <th>Valor</th>
+              <th>Lucro</th>
+              <th>Comissao</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% pedidos.forEach((pedido) => { %>
+              <tr>
+                <td><%= pedido.id %></td>
+                <td><%= pedido.nome_cliente %></td>
+                <td><%= pedido.plataforma_venda %></td>
+                <td><%= pedido.valor_bruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                <td><%= pedido.lucro_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                <td><%= pedido.comissao_vendedor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+                <td><span class="status-pill"><%= pedido.status_pedido %></span></td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#editar-<%= pedido.id %>">Editar</button>
+                  <% if (currentUser.funcao === 'Gestor') { %>
+                    <form class="d-inline" action="/pedidos/<%= pedido.id %>?_method=DELETE" method="post">
+                      <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+              <tr class="collapse-row">
+                <td colspan="8">
+                  <div class="collapse" id="editar-<%= pedido.id %>">
+                    <form class="edit-form" action="/pedidos/<%= pedido.id %>?_method=PUT" method="post">
+                      <input name="nome_cliente" value="<%= pedido.nome_cliente %>" required>
+                      <input name="plataforma_venda" value="<%= pedido.plataforma_venda %>" required>
+                      <input name="valor_bruto" type="number" step="0.01" value="<%= pedido.valor_bruto %>" required>
+                      <input name="custo_total_fornecedor" type="number" step="0.01" value="<%= pedido.custo_total_fornecedor %>" required>
+                      <input name="valor_taxas" type="number" step="0.01" value="<%= pedido.valor_taxas %>" required>
+                      <select name="vendedor_id" required>
+                        <% vendedores.forEach((vendedor) => { %>
+                          <option value="<%= vendedor.id %>" <%= vendedor.id === pedido.vendedor_id ? 'selected' : '' %>><%= vendedor.username %></option>
+                        <% }) %>
+                      </select>
+                      <input name="status_pedido" value="<%= pedido.status_pedido %>" required>
+                      <input name="data_pedido" type="hidden" value="<%= pedido.data_pedido %>">
+                      <button class="btn btn-sm btn-primary" type="submit">Salvar</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+
+  <section class="panel mt-4">
+    <div class="panel-heading">
+      <h2>Upload e conciliacao de documentos</h2>
+    </div>
+    <form class="document-form" action="/upload" method="post" enctype="multipart/form-data">
+      <select class="form-select" name="tipo_documento" required>
+        <option value="NF Venda">NF Venda</option>
+        <option value="NF Fornecedor">NF Fornecedor</option>
+      </select>
+      <select class="form-select" name="pedido_id">
+        <option value="">Vincular a pedido</option>
+        <% pedidos.forEach((pedido) => { %>
+          <option value="<%= pedido.id %>">Pedido #<%= pedido.id %> - <%= pedido.nome_cliente %></option>
+        <% }) %>
+      </select>
+      <select class="form-select" name="lancamento_manual_id">
+        <option value="">Vincular a lancamento</option>
+        <% lancamentos.forEach((lancamento) => { %>
+          <option value="<%= lancamento.id %>">Lancamento #<%= lancamento.id %> - <%= lancamento.categoria %></option>
+        <% }) %>
+      </select>
+      <input class="form-control" type="file" name="documento" required>
+      <button class="btn btn-primary" type="submit">Enviar</button>
+    </form>
+
+    <div class="table-responsive mt-3">
+      <table class="table table-sm align-middle">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+            <th>Arquivo</th>
+            <th>Vinculo</th>
+            <th>Upload</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (documentos.length === 0) { %>
+            <tr><td colspan="4" class="empty-state">Nenhum documento enviado.</td></tr>
+          <% } %>
+          <% documentos.forEach((documento) => { %>
+            <tr>
+              <td><%= documento.tipo_documento %></td>
+              <td><a href="/documentos/<%= documento.id %>/download"><%= documento.nome_arquivo %></a></td>
+              <td>
+                <% if (documento.pedido) { %>
+                  Pedido #<%= documento.pedido.id %>
+                <% } else if (documento.lancamento) { %>
+                  Lancamento #<%= documento.lancamento.id %>
+                <% } %>
+              </td>
+              <td><%= new Date(documento.data_upload).toLocaleString('pt-BR') %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
