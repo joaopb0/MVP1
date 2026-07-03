@@ -1,0 +1,61 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<main class="container-fluid app-main">
+  <%- include('../partials/flash') %>
+
+  <div class="page-heading">
+    <div>
+      <span class="app-kicker">Pedidos</span>
+      <h1>Cadastro e gestao basica</h1>
+    </div>
+    <a class="btn btn-primary" href="/pedidos/novo">Novo pedido</a>
+  </div>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <h2>Pedidos cadastrados</h2>
+      <span class="config-chip">Motor de Lucro via LucroService</span>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Plataforma</th>
+            <th>Valor bruto</th>
+            <th>Custos</th>
+            <th>Taxas</th>
+            <th>LL Real</th>
+            <th>Comissao</th>
+            <th>Status</th>
+            <th>Docs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (pedidos.length === 0) { %>
+            <tr><td colspan="10" class="empty-state">Nenhum pedido cadastrado.</td></tr>
+          <% } %>
+          <% pedidos.forEach((pedido) => { %>
+            <% const totalDocs = documentos.filter((documento) => documento.pedido_id === pedido.id).length; %>
+            <tr>
+              <td><a href="/pedidos/<%= pedido.id %>">#<%= pedido.id %></a></td>
+              <td><%= pedido.nome_cliente %></td>
+              <td><%= pedido.plataforma_venda %></td>
+              <td><%= pedido.valor_bruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><%= pedido.custo_total_fornecedor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><%= pedido.valor_taxas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><%= pedido.lucro_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><%= pedido.comissao_vendedor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><span class="status-pill"><%= pedido.status_pedido %></span></td>
+              <td><%= totalDocs %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,77 @@
+<%- include('./partials/head', { title }) %>
+<%- include('./partials/nav') %>
+
+<main class="container-fluid app-main">
+  <%- include('./partials/flash') %>
+
+  <div class="page-heading">
+    <div>
+      <span class="app-kicker">Apresentacao academica</span>
+      <h1>POC MVP1 - Sistema de Gestao Interna FJ</h1>
+    </div>
+  </div>
+
+  <section class="panel mb-4">
+    <div class="panel-heading">
+      <h2>Objetivo da POC</h2>
+    </div>
+    <p class="mb-0">
+      Validar o fluxo minimo do MVP1 para uso interno: registrar pedidos, controlar custos e taxas,
+      calcular Lucro Liquido Real, aplicar a trava de comissao, vincular documentos e consolidar uma
+      visao gerencial simples.
+    </p>
+  </section>
+
+  <section class="poc-card-grid">
+    <article class="poc-card">
+      <strong>Pedidos</strong>
+      <span>Cadastro e consulta basica.</span>
+    </article>
+    <article class="poc-card">
+      <strong>Custos/Taxas</strong>
+      <span>Valores informados por pedido.</span>
+    </article>
+    <article class="poc-card">
+      <strong>Lucro Liquido Real</strong>
+      <span>Motor financeiro isolado.</span>
+    </article>
+    <article class="poc-card">
+      <strong>Comissoes</strong>
+      <span>Trava quando LL &lt;= 0.</span>
+    </article>
+    <article class="poc-card">
+      <strong>Documentos</strong>
+      <span>Comprovante vinculado ao pedido.</span>
+    </article>
+    <article class="poc-card">
+      <strong>Dashboard</strong>
+      <span>Indicadores gerenciais da POC.</span>
+    </article>
+  </section>
+
+  <section class="content-grid mt-4">
+    <article class="panel">
+      <div class="panel-heading">
+        <h2>Formula validada</h2>
+      </div>
+      <div class="formula-box">
+        <div>LL = Valor Bruto - Custos - Taxas</div>
+        <div>Comissao = LL x percentual</div>
+        <div>Se LL &lt;= 0, comissao = 0</div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-heading">
+        <h2>Navegacao da defesa</h2>
+      </div>
+      <div class="action-links">
+        <a class="btn btn-primary" href="/pedidos">Pedidos</a>
+        <a class="btn btn-outline-primary" href="/dashboard">Dashboard</a>
+        <a class="btn btn-outline-primary" href="/poc-mvp1">POC MVP1</a>
+      </div>
+    </article>
+  </section>
+</main>
+
+<%- include('./partials/footer') %>

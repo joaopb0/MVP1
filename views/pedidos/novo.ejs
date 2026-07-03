@@ -1,0 +1,77 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<main class="container app-main app-main-narrow">
+  <%- include('../partials/flash') %>
+
+  <div class="page-heading">
+    <div>
+      <span class="app-kicker">Novo pedido</span>
+      <h1>Fluxo minimo da POC</h1>
+    </div>
+    <a class="btn btn-outline-primary" href="/pedidos">Voltar</a>
+  </div>
+
+  <form action="/pedidos/novo" method="post" enctype="multipart/form-data" class="panel stack-form">
+    <div class="panel-heading">
+      <h2>Dados do pedido</h2>
+      <span class="config-chip">LL = Valor Bruto - Custos - Taxas</span>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label" for="nome_cliente">Nome do cliente</label>
+        <input class="form-control" id="nome_cliente" name="nome_cliente" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label" for="plataforma_venda">Plataforma de venda</label>
+        <input class="form-control" id="plataforma_venda" name="plataforma_venda" placeholder="Elo7, WhatsApp, loja fisica" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="valor_bruto">Valor bruto</label>
+        <input class="form-control" id="valor_bruto" name="valor_bruto" type="number" min="0" step="0.01" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="custo_total_fornecedor">Custo total de fornecedor</label>
+        <input class="form-control" id="custo_total_fornecedor" name="custo_total_fornecedor" type="number" min="0" step="0.01" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="valor_taxas">Valor de taxas</label>
+        <input class="form-control" id="valor_taxas" name="valor_taxas" type="number" min="0" step="0.01" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="percentual_comissao">Percentual de comissao (%)</label>
+        <input class="form-control" id="percentual_comissao" name="percentual_comissao" type="number" min="0" step="0.01" value="<%= defaultCommission %>" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="status_pedido">Status do pedido</label>
+        <input class="form-control" id="status_pedido" name="status_pedido" value="Novo" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="data_pedido">Data do pedido</label>
+        <input class="form-control" id="data_pedido" name="data_pedido" type="datetime-local">
+      </div>
+    </div>
+
+    <div class="document-upload-box">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label" for="tipo_documento">Tipo de documento</label>
+          <select class="form-select" id="tipo_documento" name="tipo_documento">
+            <option value="Comprovante">Comprovante</option>
+            <option value="NF Venda">NF Venda</option>
+            <option value="NF Fornecedor">NF Fornecedor</option>
+          </select>
+        </div>
+        <div class="col-md-8">
+          <label class="form-label" for="documento">Documento vinculado ao pedido</label>
+          <input class="form-control" id="documento" name="documento" type="file">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary align-self-start" type="submit">Salvar pedido</button>
+  </form>
+</main>
+
+<%- include('../partials/footer') %>

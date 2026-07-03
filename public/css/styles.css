@@ -24,6 +24,10 @@ body {
   padding: 24px;
 }
 
+.app-main-narrow {
+  max-width: 980px;
+}
+
 .login-shell {
   align-items: center;
   background: linear-gradient(135deg, #eef2f5, #f9fafb);
@@ -106,18 +110,21 @@ body {
   grid-template-columns: minmax(160px, 1fr) minmax(160px, 1fr) auto;
 }
 
-.metrics-grid {
+.metrics-grid,
+.poc-card-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  grid-template-columns: repeat(6, minmax(140px, 1fr));
   margin-bottom: 20px;
 }
 
-.metric-box {
+.metric-box,
+.poc-card {
   padding: 16px;
 }
 
-.metric-box span {
+.metric-box span,
+.poc-card span {
   color: var(--app-muted);
   display: block;
   font-size: 0.78rem;
@@ -128,6 +135,18 @@ body {
   display: block;
   font-size: 1.35rem;
   margin-top: 6px;
+}
+
+.poc-card strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.poc-card {
+  background: var(--app-panel);
+  border: 1px solid var(--app-line);
+  border-radius: 8px;
 }
 
 .content-grid {
@@ -203,6 +222,41 @@ body {
   grid-template-columns: 160px 1fr 1fr 1.2fr auto;
 }
 
+.document-form-simple {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 180px 1fr auto;
+}
+
+.document-upload-box,
+.formula-box {
+  background: #f2f5f7;
+  border: 1px solid var(--app-line);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.detail-list {
+  display: grid;
+  gap: 8px 16px;
+  grid-template-columns: 140px 1fr;
+}
+
+.detail-list dt {
+  color: var(--app-muted);
+  font-weight: 700;
+}
+
+.detail-list dd {
+  margin: 0;
+}
+
+.action-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .table {
   --bs-table-bg: transparent;
 }
@@ -227,7 +281,9 @@ body {
 
   .filter-bar,
   .metrics-grid,
+  .poc-card-grid,
   .document-form,
+  .document-form-simple,
   .edit-form {
     grid-template-columns: 1fr;
   }

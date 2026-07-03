@@ -1,0 +1,83 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<main class="container-fluid app-main">
+  <%- include('../partials/flash') %>
+
+  <div class="page-heading">
+    <div>
+      <span class="app-kicker">Visao gerencial</span>
+      <h1>Dashboard da POC</h1>
+    </div>
+    <form class="filter-bar" method="get" action="/dashboard">
+      <input class="form-control" type="datetime-local" name="inicio" value="<%= filters.inicio || '' %>" aria-label="Inicio">
+      <input class="form-control" type="datetime-local" name="fim" value="<%= filters.fim || '' %>" aria-label="Fim">
+      <button class="btn btn-outline-primary" type="submit">Filtrar</button>
+    </form>
+  </div>
+
+  <section class="metrics-grid">
+    <article class="metric-box">
+      <span>Total de pedidos</span>
+      <strong><%= metrics.totalPedidos %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Faturamento bruto</span>
+      <strong><%= metrics.faturamento.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Lucro Liquido Real</span>
+      <strong><%= metrics.lucroLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Comissoes</span>
+      <strong><%= metrics.comissoes.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Com prejuizo</span>
+      <strong><%= metrics.pedidosComPrejuizo %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Sem prejuizo</span>
+      <strong><%= metrics.pedidosSemPrejuizo %></strong>
+    </article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-heading">
+      <h2>Pedidos recentes</h2>
+      <a class="btn btn-sm btn-primary" href="/pedidos/novo">Novo pedido</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Plataforma</th>
+            <th>Valor bruto</th>
+            <th>Lucro</th>
+            <th>Comissao</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (pedidos.length === 0) { %>
+            <tr><td colspan="6" class="empty-state">Nenhum pedido no periodo.</td></tr>
+          <% } %>
+          <% pedidos.forEach((pedido) => { %>
+            <tr>
+              <td><a href="/pedidos/<%= pedido.id %>"><%= pedido.nome_cliente %></a></td>
+              <td><%= pedido.plataforma_venda %></td>
+              <td><%= pedido.valor_bruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><%= pedido.lucro_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><%= pedido.comissao_vendedor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></td>
+              <td><span class="status-pill"><%= pedido.status_pedido %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

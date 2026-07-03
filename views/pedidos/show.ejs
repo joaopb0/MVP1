@@ -1,0 +1,104 @@
+<%- include('../partials/head', { title }) %>
+<%- include('../partials/nav') %>
+
+<main class="container-fluid app-main">
+  <%- include('../partials/flash') %>
+
+  <div class="page-heading">
+    <div>
+      <span class="app-kicker">Pedido #<%= pedido.id %></span>
+      <h1><%= pedido.nome_cliente %></h1>
+    </div>
+    <a class="btn btn-outline-primary" href="/pedidos">Voltar</a>
+  </div>
+
+  <section class="metrics-grid">
+    <article class="metric-box">
+      <span>Valor bruto</span>
+      <strong><%= pedido.valor_bruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Custos</span>
+      <strong><%= pedido.custo_total_fornecedor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Taxas</span>
+      <strong><%= pedido.valor_taxas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Lucro Liquido Real</span>
+      <strong><%= pedido.lucro_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Comissao</span>
+      <strong><%= pedido.comissao_vendedor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %></strong>
+    </article>
+    <article class="metric-box">
+      <span>Percentual</span>
+      <strong><%= (pedido.percentual_comissao * 100).toLocaleString('pt-BR') %>%</strong>
+    </article>
+  </section>
+
+  <section class="content-grid">
+    <article class="panel">
+      <div class="panel-heading">
+        <h2>Resumo do pedido</h2>
+      </div>
+      <dl class="detail-list">
+        <dt>Plataforma</dt>
+        <dd><%= pedido.plataforma_venda %></dd>
+        <dt>Status</dt>
+        <dd><span class="status-pill"><%= pedido.status_pedido %></span></dd>
+        <dt>Data do pedido</dt>
+        <dd><%= new Date(pedido.data_pedido).toLocaleString('pt-BR') %></dd>
+      </dl>
+      <div class="formula-box">
+        <strong>Formula da POC</strong>
+        <div>LL = Valor Bruto - Custos - Taxas</div>
+        <div>Comissao = LL x percentual, com trava para LL &lt;= 0.</div>
+      </div>
+    </article>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h2>Documentos vinculados</h2>
+      </div>
+
+      <form class="document-form-simple" action="/pedidos/<%= pedido.id %>/documentos" method="post" enctype="multipart/form-data">
+        <select class="form-select" name="tipo_documento" required>
+          <option value="Comprovante">Comprovante</option>
+          <option value="NF Venda">NF Venda</option>
+          <option value="NF Fornecedor">NF Fornecedor</option>
+        </select>
+        <input class="form-control" type="file" name="documento" required>
+        <button class="btn btn-primary" type="submit">Vincular</button>
+      </form>
+
+      <div class="table-responsive mt-3">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Arquivo</th>
+              <th>Upload</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (documentos.length === 0) { %>
+              <tr><td colspan="3" class="empty-state">Nenhum documento vinculado.</td></tr>
+            <% } %>
+            <% documentos.forEach((documento) => { %>
+              <tr>
+                <td><%= documento.tipo_documento %></td>
+                <td><a href="/documentos/<%= documento.id %>/download"><%= documento.nome_arquivo %></a></td>
+                <td><%= new Date(documento.data_upload).toLocaleString('pt-BR') %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
