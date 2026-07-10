@@ -1,4 +1,4 @@
-const database = require('../db');
+const dataStore = require('../dataStore');
 
 function index(req, res) {
   const filters = {
@@ -9,8 +9,8 @@ function index(req, res) {
   res.render('dashboard/index', {
     title: 'Dashboard',
     filters,
-    metrics: database.dashboardMetrics(filters),
-    pedidos: database.listPedidos(filters)
+    metrics: dataStore.dashboardMetrics(filters),
+    pedidos: dataStore.listPedidos(filters)
   });
 }
 

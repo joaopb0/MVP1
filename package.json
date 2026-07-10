@@ -5,21 +5,19 @@
   "main": "app.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node --disable-warning=ExperimentalWarning app.js",
-    "dev": "node --disable-warning=ExperimentalWarning app.js",
+    "start": "node app.js",
+    "dev": "node app.js",
     "test": "npm run test:lucro",
     "test:lucro": "node scripts/test_motor_lucro.js",
-    "lint": "eslint app.js db.js controllers routes services middleware scripts"
+    "lint": "eslint app.js dataStore.js controllers routes services scripts"
   },
   "engines": {
-    "node": ">=22.5.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
-    "bcrypt": "^6.0.0",
     "bootstrap": "^5.3.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
-    "express-session": "^1.18.1",
     "multer": "^2.0.2"
   },
   "devDependencies": {

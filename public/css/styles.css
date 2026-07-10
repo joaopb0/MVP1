@@ -28,16 +28,6 @@ body {
   max-width: 980px;
 }
 
-.login-shell {
-  align-items: center;
-  background: linear-gradient(135deg, #eef2f5, #f9fafb);
-  display: flex;
-  min-height: 100vh;
-  justify-content: center;
-  padding: 24px;
-}
-
-.login-panel,
 .panel,
 .metric-box {
   background: var(--app-panel);
@@ -46,26 +36,10 @@ body {
   box-shadow: 0 10px 24px rgba(32, 36, 42, 0.06);
 }
 
-.login-panel {
-  max-width: 420px;
-  padding: 28px;
-  width: 100%;
-}
-
-.login-title h1,
 .page-heading h1,
 .panel-heading h2 {
   letter-spacing: 0;
   margin: 0;
-}
-
-.login-title h1 {
-  font-size: 1.6rem;
-}
-
-.login-title p {
-  color: var(--app-muted);
-  margin: 6px 0 24px;
 }
 
 .app-kicker {
@@ -75,15 +49,6 @@ body {
   font-weight: 700;
   margin-bottom: 4px;
   text-transform: uppercase;
-}
-
-.seed-box {
-  background: #f2f5f7;
-  border-radius: 6px;
-  color: var(--app-muted);
-  font-size: 0.86rem;
-  margin-top: 20px;
-  padding: 12px;
 }
 
 .stack-form {

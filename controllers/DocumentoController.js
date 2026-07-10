@@ -1,16 +1,12 @@
 const fs = require('fs');
 const path = require('path');
-const database = require('../db');
+const dataStore = require('../dataStore');
 
 function download(req, res) {
-  const documento = database.findDocumentoById(req.params.id);
+  const documento = dataStore.findDocumentoById(req.params.id);
 
   if (!documento || !fs.existsSync(documento.caminho_arquivo)) {
-    req.session.flash = {
-      type: 'danger',
-      message: 'Documento nao encontrado.'
-    };
-    return res.redirect('/pedidos');
+    return res.redirect('/pedidos?error=Documento%20nao%20encontrado.');
   }
 
   return res.download(path.resolve(documento.caminho_arquivo), documento.nome_arquivo);

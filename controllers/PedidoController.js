@@ -1,18 +1,23 @@
 const fs = require('fs');
-const database = require('../db');
+const dataStore = require('../dataStore');
+
+function redirectWithMessage(res, path, type, message) {
+  const param = type === 'success' ? 'success' : 'error';
+  return res.redirect(`${path}?${param}=${encodeURIComponent(message)}`);
+}
 
 function index(req, res) {
   res.render('pedidos/index', {
     title: 'Pedidos',
-    pedidos: database.listPedidos(),
-    documentos: database.listDocumentos()
+    pedidos: dataStore.listPedidos(),
+    documentos: dataStore.listDocumentos()
   });
 }
 
 function novo(req, res) {
   res.render('pedidos/novo', {
     title: 'Novo pedido',
-    defaultCommission: database.DEFAULT_COMMISSION_PERCENTAGE * 100
+    defaultCommission: dataStore.DEFAULT_COMMISSION_PERCENTAGE * 100
   });
 }
 
@@ -20,10 +25,10 @@ function store(req, res) {
   let pedido;
 
   try {
-    pedido = database.createPedido(req.body);
+    pedido = dataStore.createPedido(req.body);
 
     if (req.file) {
-      database.createDocumento({
+      dataStore.createDocumento({
         pedido_id: pedido.id,
         tipo_documento: req.body.tipo_documento,
         nome_arquivo: req.file.originalname,
@@ -31,72 +36,58 @@ function store(req, res) {
       });
     }
 
-    req.session.flash = {
-      type: 'success',
-      message: 'Pedido registrado com lucro liquido real e comissao calculados.'
-    };
-    return res.redirect(`/pedidos/${pedido.id}`);
+    return redirectWithMessage(
+      res,
+      `/pedidos/${pedido.id}`,
+      'success',
+      'Pedido registrado com lucro liquido real e comissao calculados.'
+    );
   } catch (error) {
     if (req.file) fs.unlink(req.file.path, () => {});
 
-    req.session.flash = {
-      type: 'danger',
-      message: error.message
-    };
-    return res.redirect('/pedidos/novo');
+    return redirectWithMessage(res, '/pedidos/novo', 'error', error.message);
   }
 }
 
 function show(req, res) {
-  const pedido = database.findPedidoById(req.params.id);
+  const pedido = dataStore.findPedidoById(req.params.id);
 
   if (!pedido) {
-    req.session.flash = {
-      type: 'danger',
-      message: 'Pedido nao encontrado.'
-    };
-    return res.redirect('/pedidos');
+    return redirectWithMessage(res, '/pedidos', 'error', 'Pedido nao encontrado.');
   }
 
   return res.render('pedidos/show', {
     title: `Pedido #${pedido.id}`,
     pedido,
-    documentos: database.listDocumentos({ pedidoId: pedido.id })
+    documentos: dataStore.listDocumentos({ pedidoId: pedido.id })
   });
 }
 
 function storeDocumento(req, res) {
-  const pedido = database.findPedidoById(req.params.id);
+  const pedido = dataStore.findPedidoById(req.params.id);
 
   if (!pedido) {
     if (req.file) fs.unlink(req.file.path, () => {});
-    req.session.flash = {
-      type: 'danger',
-      message: 'Pedido nao encontrado.'
-    };
-    return res.redirect('/pedidos');
+    return redirectWithMessage(res, '/pedidos', 'error', 'Pedido nao encontrado.');
   }
 
   if (!req.file) {
-    req.session.flash = {
-      type: 'danger',
-      message: 'Selecione um documento para vincular ao pedido.'
-    };
-    return res.redirect(`/pedidos/${pedido.id}`);
+    return redirectWithMessage(
+      res,
+      `/pedidos/${pedido.id}`,
+      'error',
+      'Selecione um documento para vincular ao pedido.'
+    );
   }
 
-  database.createDocumento({
+  dataStore.createDocumento({
     pedido_id: pedido.id,
     tipo_documento: req.body.tipo_documento,
     nome_arquivo: req.file.originalname,
     caminho_arquivo: req.file.path
   });
 
-  req.session.flash = {
-    type: 'success',
-    message: 'Documento vinculado ao pedido.'
-  };
-  return res.redirect(`/pedidos/${pedido.id}`);
+  return redirectWithMessage(res, `/pedidos/${pedido.id}`, 'success', 'Documento vinculado ao pedido.');
 }
 
 module.exports = {

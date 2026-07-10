@@ -14,13 +14,13 @@ A POC cobre cadastro e listagem de pedidos, calculo do Lucro Liquido Real, calcu
 - Express
 - EJS
 - Bootstrap
-- SQLite local via `node:sqlite`
+- Armazenamento em memoria para demonstracao
 
-O documento academico cita MySQL/MariaDB como possibilidade futura. Nesta POC foi mantido SQLite por simplicidade de instalacao, execucao local e defesa do fluxo principal, sem migracao definitiva de banco neste momento.
+O documento academico cita MySQL/MariaDB como possibilidade futura. Nesta versao da POC nao ha banco de dados, porque a entrega foi ajustada para deploy gratuito no Render sem contratar servico de banco. Os dados cadastrados ficam somente em memoria e sao reiniciados quando o servidor reinicia.
 
 ## Fora do escopo da POC
 
-Migracao definitiva de banco, conciliacao bancaria, integracao fiscal automatica, emissao de nota fiscal, aplicativo mobile nativo, relatorios avancados e automacoes complexas ficam como evolucoes futuras.
+Autenticacao completa, controle de usuarios, migracao definitiva de banco, conciliacao bancaria, integracao fiscal automatica, emissao de nota fiscal, aplicativo mobile nativo, relatorios avancados e automacoes complexas ficam como evolucoes futuras.
 
 O repositorio `joaopb0/FJ` serviu apenas como referencia tecnica e visual para organizacao Express/EJS, autenticacao, uploads e navegacao. Este MVP1 e uma versao reduzida para validacao academica, nao uma copia do sistema completo.
 
@@ -32,12 +32,9 @@ npm start
 ```
 
 Acesse `http://localhost:3000`.
-Requer Node.js `>=22.5.0`, pois a POC usa o modulo nativo `node:sqlite`.
+Requer Node.js `>=18.0.0`.
 
-Usuarios seed:
-
-- Gestor: `gestor` / `123456`
-- Vendedor: `vendedor` / `123456`
+A POC nao possui login ou senha. As telas ficam publicas para facilitar a apresentacao academica e o deploy gratuito.
 
 ## Teste do motor de lucro
 
@@ -47,4 +44,4 @@ npm run test:lucro
 
 ## About sugerido para o GitHub
 
-POC do MVP1 do Sistema de Gestao Interna da FJ Grafica e Papelaria, focada em pedidos, custos, lucro liquido real, comissoes, documentos e visao gerencial em Node.js, Express, EJS e SQLite.
+POC do MVP1 do Sistema de Gestao Interna da FJ Grafica e Papelaria, focada em pedidos, custos, lucro liquido real, comissoes, documentos e visao gerencial em Node.js, Express, EJS e Bootstrap.
