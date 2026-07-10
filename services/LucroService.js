@@ -1,13 +1,33 @@
 const DEFAULT_COMMISSION_PERCENTAGE = 0.1;
 
 function normalizarNumero(valor) {
-  if (typeof valor === 'number') {
-    return Number.isFinite(valor) ? valor : 0;
+  if (valor === null || valor === undefined || String(valor).trim() === '') {
+    throw new Error('Valores numericos obrigatorios');
   }
 
-  const normalizado = String(valor ?? '0').trim().replace(',', '.');
+  if (typeof valor === 'boolean') {
+    throw new Error('Input invalido. Esperado Decimal');
+  }
+
+  if (typeof valor === 'number') {
+    if (!Number.isFinite(valor)) {
+      throw new Error('Input invalido. Esperado Decimal');
+    }
+
+    return valor;
+  }
+
+  if (typeof valor !== 'string') {
+    throw new Error('Input invalido. Esperado Decimal');
+  }
+
+  const normalizado = valor.trim().replace(',', '.');
   const numero = Number(normalizado);
-  return Number.isFinite(numero) ? numero : 0;
+  if (!Number.isFinite(numero)) {
+    throw new Error('Input invalido. Esperado Decimal');
+  }
+
+  return numero;
 }
 
 function arredondarMoeda(valor) {
@@ -18,7 +38,13 @@ function arredondarMoeda(valor) {
 function normalizarPercentual(valor) {
   const percentual = normalizarNumero(valor);
   if (percentual <= 0) return 0;
-  return percentual > 1 ? percentual / 100 : percentual;
+
+  const percentualNormalizado = percentual > 1 ? percentual / 100 : percentual;
+  if (percentualNormalizado > 1) {
+    throw new Error('A comissao nao pode exceder 100%');
+  }
+
+  return percentualNormalizado;
 }
 
 function calcularLucroLiquido(valorBruto, custoFornecedorTotal, valorTaxas) {

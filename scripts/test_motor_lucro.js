@@ -43,6 +43,7 @@ const casos = [
   },
   {
     id: 'CT-04',
+    categoria: 'Precisao',
     entrada: {
       valorBruto: 20,
       valorTaxas: 9,
@@ -53,10 +54,67 @@ const casos = [
       lucroLiquido: 3,
       comissaoVendedor: 0.15
     }
+  },
+  {
+    id: 'CT-05',
+    categoria: 'Precisao',
+    entrada: {
+      valorBruto: 33.33,
+      valorTaxas: 5,
+      custoFornecedorTotal: 10,
+      percentualComissao: 3.33
+    },
+    esperado: {
+      lucroLiquido: 18.33,
+      comissaoVendedor: 0.61
+    }
+  },
+  {
+    id: 'CT-06',
+    categoria: 'Excecao / Input',
+    entrada: {
+      valorBruto: null,
+      valorTaxas: 10,
+      custoFornecedorTotal: 10,
+      percentualComissao: 10
+    },
+    erroEsperado: 'Valores numericos obrigatorios'
+  },
+  {
+    id: 'CT-07',
+    categoria: 'Excecao / Input',
+    entrada: {
+      valorBruto: 'cem',
+      valorTaxas: 10,
+      custoFornecedorTotal: 10,
+      percentualComissao: 10
+    },
+    erroEsperado: 'Input invalido. Esperado Decimal'
+  },
+  {
+    id: 'CT-08',
+    categoria: 'Limite',
+    entrada: {
+      valorBruto: 100,
+      valorTaxas: 10,
+      custoFornecedorTotal: 40,
+      percentualComissao: 150
+    },
+    erroEsperado: 'A comissao nao pode exceder 100%'
   }
 ];
 
 casos.forEach((caso) => {
+  if (caso.erroEsperado) {
+    assert.throws(
+      () => calcularResumoPedido(caso.entrada),
+      (error) => error.message === caso.erroEsperado,
+      `${caso.id} erro esperado`
+    );
+    console.log(`${caso.id} aprovado`);
+    return;
+  }
+
   const resultado = calcularResumoPedido(caso.entrada);
   assert.equal(resultado.lucroLiquido, caso.esperado.lucroLiquido, `${caso.id} lucro liquido`);
   assert.equal(
@@ -67,4 +125,4 @@ casos.forEach((caso) => {
   console.log(`${caso.id} aprovado`);
 });
 
-console.log('Motor de lucro aprovado em todos os cenarios da POC.');
+console.log('Motor de lucro aprovado em todos os cenarios da matriz do PDF.');

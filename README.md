@@ -2,6 +2,8 @@
 
 Este repositorio contem uma Prova de Conceito academica do MVP1 do Sistema de Gestao Interna da FJ Grafica e Papelaria. O objetivo e validar, de forma enxuta, o fluxo central de gestao de pedidos com apuracao financeira real por pedido.
 
+O propósito da POC é validar a possibilidade da realização do projeto, o software final contará com mais funcionalidades e novas telas.
+
 ## Escopo validado
 
 Fluxo central da POC: Pedido -> Custos/Taxas -> Lucro Liquido Real -> Comissao -> Documentos -> Dashboard.
