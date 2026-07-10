@@ -41,7 +41,3 @@ A POC nao possui login ou senha. As telas ficam publicas para facilitar a aprese
 ```bash
 npm run test:lucro
 ```
-
-## About sugerido para o GitHub
-
-POC do MVP1 do Sistema de Gestao Interna da FJ Grafica e Papelaria, focada em pedidos, custos, lucro liquido real, comissoes, documentos e visao gerencial em Node.js, Express, EJS e Bootstrap.
